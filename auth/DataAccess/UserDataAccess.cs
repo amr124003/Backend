@@ -6,9 +6,9 @@ using myapp.Data;
 namespace myapp.DataAccess
 {
 
-     public class UserDataAccess
+    public class UserDataAccess
     {
-        private readonly 
+        private readonly
   ApplicationDbContext _context;
 
         public UserDataAccess(ApplicationDbContext context
@@ -22,7 +22,8 @@ namespace myapp.DataAccess
         {
             try
             {
-                await Task.CompletedTask; // Placeholder
+                _context.Users.Add(user); // Assuming you have a DbSet<User> named Users in your ApplicationDbContext
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -33,9 +34,9 @@ namespace myapp.DataAccess
             }
         }
 
-        
+
         public async Task<User?> FindUserByUsernameAsync(string username)
-        { 
+        {
             await Task.CompletedTask; // Placeholder
             return null;
 
@@ -52,7 +53,7 @@ namespace myapp.DataAccess
             return null;
         }
 
-      
+
         /// <param name="email">The email address to search for.</param>
         /// <returns>The User object if found, otherwise null.</returns>
         public async Task<User?> FindUserByEmailAsync(string email)
@@ -65,7 +66,7 @@ namespace myapp.DataAccess
             // return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        
+
         /// <param name="email">The email address to search for.</param>
         /// <returns>The User object if found, otherwise null.</returns>
         public async Task<User?> GetUserByEmailAsync(string email)

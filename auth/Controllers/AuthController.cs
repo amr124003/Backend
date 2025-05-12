@@ -1,28 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
-using myapp.auth.Models; // Assuming your User model is in this namespace
-using myapp.DataAccess; // Ensure this using directive is at the very top
+using myapp.auth.Models;
+using myapp.DataAccess;
+using BCrypt.Net;
 
 public class AuthController : ControllerBase
 {
-    public class SignupModel    {
-        public required string FullName { get; set; }
-        public required string Email { get; set; }
-        public required string Password { get; set; }
-        public required string ConfirmPassword { get; set; }
-    }
-
-    public class SigninModel
-    {
-        public required string Username { get; set; }
-        public required string Password { get; set; }
-    }
-
     private readonly UserDataAccess _userDataAccess;
+    private readonly IConfiguration _configuration;
 
-    public AuthController(UserDataAccess userDataAccess)
+    public AuthController(UserDataAccess userDataAccess, IConfiguration configuration)
     {
         _userDataAccess = userDataAccess;
+        _configuration = configuration;
     }
 
     [HttpPost("signup")]
@@ -33,66 +28,67 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        // 1. Check if passwords match
         if (model.Password != model.ConfirmPassword)
         {
             return BadRequest("Passwords do not match.");
         }
 
-        // 2. Check if user already exists by email or username
         var existingUser = await _userDataAccess.GetUserByEmailAsync(model.Email);
         if (existingUser != null)
         {
             return Conflict("User with this email already exists.");
         }
-        // You might also want to check for existing username if it's a separate field
-        // }
 
-        // TODO: 3. Hash the password
-        // Use a library like BCrypt.Net or similar for secure password hashing
-        // var hashedPassword = _passwordHasher.HashPassword(model.Password);
-        string hashedPassword = "hashed_" + model.Password; // Placeholder
+        // Hash the password
+        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
-        // TODO: 4. Create a new user in the database
         var newUser = new User
         {
             FullName = model.FullName,
             Email = model.Email,
-            Username = model.Email.Split('@')[0], // Explicit placeholder: You need to replace this with your actual username assignment logic
+            Username = model.Email.Split('@')[0],
             Password = hashedPassword,
         };
         await _userDataAccess.CreateUserAsync(newUser);
 
-        // 5. Return appropriate response
         return Ok("Signup successful.");
     }
 
     [HttpPost("signin")]
     public async Task<IActionResult> Signin([FromBody] SigninModel model)
     {
- if (!ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
- return BadRequest(ModelState);
+            return BadRequest(ModelState);
         }
 
-        // TODO: 1. Find the user by username
- var user = await _userDataAccess.GetUserByUsernameAsync(model.Username);
-        if (user == null)
-        {
- return Unauthorized("Invalid username or password.");
-        }
-
-        // 3. Verify the password (compare hashed password)
-        // Use your password hashing library to compare the provided password with the hashed password from the database.
-        var isPasswordValid = true; // Placeholder for password verification logic
-        if (!isPasswordValid)
+        var user = await _userDataAccess.GetUserByUsernameAsync(model.Username);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
         {
             return Unauthorized("Invalid username or password.");
         }
 
-        // 4. Generate a JWT or other authentication token
-        // 5. Return the token and user information
+        // Generate JWT token
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[]
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Email, user.Email)
+            }),
+            Expires = DateTime.UtcNow.AddHours(1),
+            Issuer = _configuration["Jwt:Issuer"],
+            Audience = _configuration["Jwt:Audience"],
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
 
-        return Ok("Signin successful (placeholder)");
+        return Ok(new
+        {
+            Token = tokenHandler.WriteToken(token),
+            Expiration = token.ValidTo
+        });
     }
 }

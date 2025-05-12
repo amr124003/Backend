@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         // Configure JWT bearer options
-        var signingKey = builder.Configuration["Jwt:SigningKey"];
+        var signingKey = builder.Configuration["Jwt:Key"];
         if (string.IsNullOrEmpty(signingKey))
         {
             throw new InvalidOperationException("JWT SigningKey is not configured.");
@@ -46,8 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(signingKey)),
-            
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidateAudience = true,
@@ -84,3 +83,17 @@ app.UseMiddleware<AuthMiddleware>();
 app.MapControllers();
 
 app.Run();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    try
+    {
+        dbContext.Database.CanConnect();
+        Console.WriteLine("Database connection successful.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database connection failed: {ex.Message}");
+    }
+}
