@@ -63,8 +63,18 @@ public class AuthController : ControllerBase
         }
 
         var user = await _userDataAccess.GetUserByUsernameAsync(model.Username);
-        if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+        if (user == null)
         {
+            Console.WriteLine("User not found.");
+            return Unauthorized("Invalid username or password.");
+        }
+
+        Console.WriteLine($"Stored Password: {user.Password}");
+        Console.WriteLine($"Provided Password: {model.Password}");
+
+        if (!BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+        {
+            Console.WriteLine("Password verification failed.");
             return Unauthorized("Invalid username or password.");
         }
 
@@ -75,9 +85,9 @@ public class AuthController : ControllerBase
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
-            }),
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Email)
+        }),
             Expires = DateTime.UtcNow.AddHours(1),
             Issuer = _configuration["Jwt:Issuer"],
             Audience = _configuration["Jwt:Audience"],
@@ -92,3 +102,4 @@ public class AuthController : ControllerBase
         });
     }
 }
+

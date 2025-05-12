@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using myapp.auth.Models;
-
+using Microsoft.EntityFrameworkCore;
 using myapp.Data;
 namespace myapp.DataAccess
 {
@@ -47,11 +47,9 @@ namespace myapp.DataAccess
         /// <returns>The User object if found, otherwise null.</returns>
         public async Task<User?> GetUserByUsernameAsync(string username)
         {
-            // Example using Entity Framework Core: return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-            // Add database interaction logic here to find the user by username
-            await Task.CompletedTask; // Placeholder
-            return null;
+            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
         }
+
 
 
         /// <param name="email">The email address to search for.</param>
