@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using myapp.auth.Models;
 
 namespace myapp.Data
 {
@@ -8,5 +9,7 @@ namespace myapp.Data
             : base(options)
         {
         }
+
+        public DbSet<User> Users { get; set; }
     }
 }
