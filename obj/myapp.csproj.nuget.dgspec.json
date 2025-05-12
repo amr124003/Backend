@@ -45,9 +45,11 @@
           "dependencies": {
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[8.0.*, )"
+              "version": "[8.0.0, )"
             },
-            "Microsoft.EntityFrameworkCore": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.4, )"
             },
@@ -58,10 +60,6 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[8.1.1, )"
-            },
-            "System.IdentityModel.Tokens.Jwt": {
-              "target": "Package",
-              "version": "[8.9.0, )"
             }
           },
           "imports": [
