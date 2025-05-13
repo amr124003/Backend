@@ -33,7 +33,6 @@ C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Micr
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Microsoft.IdentityModel.Tokens.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Microsoft.OpenApi.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Microsoft.SqlServer.Server.dll
-C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Microsoft.Win32.SystemEvents.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Mono.TextTemplating.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Swashbuckle.AspNetCore.SwaggerGen.dll
@@ -45,13 +44,10 @@ C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\Syst
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Composition.Runtime.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Composition.TypedParts.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Configuration.ConfigurationManager.dll
-C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Drawing.Common.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Memory.Data.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Runtime.Caching.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Security.Cryptography.ProtectedData.dll
-C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Security.Permissions.dll
-C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.Windows.Extensions.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\de\Microsoft.CodeAnalysis.resources.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\es\Microsoft.CodeAnalysis.resources.dll
@@ -452,3 +448,14 @@ C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\win-x64\refi
 C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\win-x64\myapp.pdb
 C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\win-x64\myapp.genruntimeconfig.cache
 C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\win-x64\ref\myapp.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\System.ClientModel.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\de\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\es\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\fr\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\it\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\ja\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\ko\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\pt-BR\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\ru\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\zh-Hans\Microsoft.Data.SqlClient.resources.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\win-x64\zh-Hant\Microsoft.Data.SqlClient.resources.dll

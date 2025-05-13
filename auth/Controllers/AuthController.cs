@@ -9,6 +9,8 @@ using myapp.auth.Models;
 using myapp.DataAccess;
 using BCrypt.Net;
 
+[ApiController]
+[Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly UserDataAccess _userDataAccess;
@@ -57,49 +59,62 @@ public class AuthController : ControllerBase
     [HttpPost("signin")]
     public async Task<IActionResult> Signin([FromBody] SigninModel model)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return BadRequest(ModelState);
-        }
-
-        var user = await _userDataAccess.GetUserByUsernameAsync(model.Username);
-        if (user == null)
-        {
-            Console.WriteLine("User not found.");
-            return Unauthorized("Invalid username or password.");
-        }
-
-        Console.WriteLine($"Stored Password: {user.Password}");
-        Console.WriteLine($"Provided Password: {model.Password}");
-
-        if (!BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-        {
-            Console.WriteLine("Password verification failed.");
-            return Unauthorized("Invalid username or password.");
-        }
-
-        // Generate JWT token
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new[]
+            if (!ModelState.IsValid)
             {
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Email, user.Email)
-        }),
-            Expires = DateTime.UtcNow.AddHours(1),
-            Issuer = _configuration["Jwt:Issuer"],
-            Audience = _configuration["Jwt:Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
+                return BadRequest(ModelState);
+            }
 
-        return Ok(new
+            var user = await _userDataAccess.GetUserByUsernameAsync(model.Username);
+            if (user == null)
+            {
+                Console.WriteLine("User not found.");
+                return Unauthorized("Invalid username or password.");
+            }
+
+            if (string.IsNullOrEmpty(user.Password) || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            {
+                Console.WriteLine("Password verification failed.");
+                return Unauthorized("Invalid username or password.");
+            }
+
+            // Check JWT configuration values
+            var keyString = _configuration["Jwt:Key"];
+            var issuer = _configuration["Jwt:Issuer"];
+            var audience = _configuration["Jwt:Audience"];
+            if (string.IsNullOrEmpty(keyString) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
+            {
+                return StatusCode(500, "JWT configuration is missing.");
+            }
+
+            // Generate JWT token
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(keyString);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Email, user.Email)
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                Issuer = issuer,
+                Audience = audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return Ok(new
+            {
+                Token = tokenHandler.WriteToken(token),
+                Expiration = token.ValidTo
+            });
+        }
+        catch (Exception ex)
         {
-            Token = tokenHandler.WriteToken(token),
-            Expiration = token.ValidTo
-        });
+            Console.WriteLine(ex);
+            return StatusCode(500, "An error occurred during signin.");
+        }
     }
 }
-
