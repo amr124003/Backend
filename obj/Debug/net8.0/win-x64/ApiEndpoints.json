@@ -1,0 +1,34 @@
+[
+  {
+    "ContainingType": "AuthController",
+    "Method": "Signin",
+    "RelativePath": "signin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "myapp.auth.Models.SigninModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "AuthController",
+    "Method": "Signup",
+    "RelativePath": "signup",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "myapp.auth.Models.SignupModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -17,18 +17,16 @@ namespace myapp.DataAccess
             _context = context;
         }
 
-        /// <param name="user">The user object to create.</param>
         public async Task<bool> CreateUserAsync(User user)
         {
             try
             {
-                _context.Users.Add(user); // Assuming you have a DbSet<User> named Users in your ApplicationDbContext
+                _context.Users.Add(user); 
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error creating user: {ex.Message}");
                 return false;
             }
