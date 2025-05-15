@@ -318,3 +318,4 @@ C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\refint\myapp
 C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\myapp.pdb
 C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\myapp.genruntimeconfig.cache
 C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\ref\myapp.dll
+C:\Users\user\Documents\Graduation Project\Backend\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
