@@ -32,6 +32,37 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "myapp.auth.Controllers.LeaderboardController",
+    "Method": "GetLeaderboard",
+    "RelativePath": "api/Leaderboard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "period",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "top",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "myapp.auth.Models.LeaderboardResult",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "myapp.auth.Controllers.PlansController",
     "Method": "GetAllPlans",
     "RelativePath": "api/Plans",

@@ -11,7 +11,7 @@ namespace myapp.auth.Controllers
         {
             new Plan
             {
-                Id = "basic1",
+                Id = 1,
                 Name = "Get Basic",
                 Description = "Remove Add & Unlock All Location",
                 Icon = "1",
@@ -29,7 +29,7 @@ namespace myapp.auth.Controllers
             },
             new Plan
             {
-                Id = "premium",
+                Id = 2,
                 Name = "Get Premium",
                 Description = "Remove Add & Unlock All Location",
                 Icon = "crown",
@@ -49,7 +49,7 @@ namespace myapp.auth.Controllers
             },
             new Plan
             {
-                Id = "basic2",
+                Id = 3,
                 Name = "Get Basic",
                 Description = "Remove Add & Unlock All Location",
                 Icon = "2",
@@ -73,9 +73,9 @@ namespace myapp.auth.Controllers
         public ActionResult<IEnumerable<Plan>> GetAllPlans() => Plans;
 
         [HttpGet("{id}")]
-        public ActionResult<Plan> GetPlanById(string id)
+        public ActionResult<Plan> GetPlanById(int id) // Changed parameter type to int
         {
-            var plan = Plans.FirstOrDefault(p => p.Id == id);
+            var plan = Plans.FirstOrDefault(p => p.Id == id); // No change needed here
             if (plan == null) return NotFound();
             return plan;
         }

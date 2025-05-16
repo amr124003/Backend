@@ -11,7 +11,7 @@ namespace myapp.auth.Controllers
         {
             ["user1"] = new Profile
             {
-                Id = "user1",
+                Id = 1,
                 FullName = "Amera Mahmoud",
                 Email = "amera@email.com",
                 PhotoUrl = "https://example.com/profile-photo.png",
@@ -60,11 +60,12 @@ namespace myapp.auth.Controllers
         [HttpPost]
         public ActionResult<Profile> CreateProfile([FromBody] Profile newProfile)
         {
-            if (Profiles.ContainsKey(newProfile.Id))
+            var profileKey = newProfile.Id.ToString(); // Convert the integer Id to a string key
+            if (Profiles.ContainsKey(profileKey))
                 return Conflict("Profile already exists.");
 
-            Profiles[newProfile.Id] = newProfile;
-            return CreatedAtAction(nameof(GetProfile), new { id = newProfile.Id }, newProfile);
+            Profiles[profileKey] = newProfile; // Use the string key for the dictionary
+            return CreatedAtAction(nameof(GetProfile), new { id = profileKey }, newProfile);
         }
 
         [HttpDelete("{id}")]

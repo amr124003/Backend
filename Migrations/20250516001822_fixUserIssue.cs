@@ -5,7 +5,7 @@
 namespace myapp.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserTable : Migration
+    public partial class fixUserIssue : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +31,7 @@ namespace myapp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+               name: "Users");
         }
     }
 }

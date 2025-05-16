@@ -2,7 +2,7 @@ namespace myapp.auth.Models
 {
     public class Plan
     {
-        public string Id { get; set; } = default!;
+        public int Id { get; set; } = default!;
         public string Name { get; set; } = default!;
         public string Description { get; set; } = default!;
         public List<PlanOption> Options { get; set; } = new();
