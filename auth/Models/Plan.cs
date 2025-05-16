@@ -1,21 +1,36 @@
+using System.Text.Json.Serialization;
+
 namespace myapp.auth.Models
 {
     public class Plan
     {
-        public int Id { get; set; } = default!;
-        public string Name { get; set; } = default!;
-        public string Description { get; set; } = default!;
-        public List<PlanOption> Options { get; set; } = new();
-        public List<string> Features { get; set; } = new();
-        public string Icon { get; set; } = default!; // e.g., "1", "2", "crown"
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
+        public List<PlanOption>? Options { get; set; }
+        public string? Icon { get; set; }
     }
 
     public class PlanOption
     {
+        public int Id { get; set; }
         public int DurationMonths { get; set; }
-        public string Label { get; set; } = default!;
+        public string? Label { get; set; }
         public decimal Price { get; set; }
-        public string PriceUnit { get; set; } = "EGP";
-        public string Note { get; set; } = default!;
+        public string? PriceUnit { get; set; }
+        public string? Note { get; set; }
+        public List<PlanFeature>? Features { get; set; }
+        public int PlanId { get; set; }
+        [JsonIgnore]
+        public Plan? Plan { get; set; }
+    }
+
+    public class PlanFeature
+    {
+        public int Id { get; set; }
+        public string? Description { get; set; }
+        public int PlanOptionId { get; set; }
+        [JsonIgnore]
+        public PlanOption? PlanOption { get; set; }
     }
 }

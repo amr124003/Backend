@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using myapp.Data;
 
@@ -10,9 +11,11 @@ using myapp.Data;
 namespace myapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250516020348_planJsonIgnore")]
+    partial class planJsonIgnore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,12 +80,12 @@ namespace myapp.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PlanOptionId")
+                    b.Property<int>("PlanId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlanOptionId");
+                    b.HasIndex("PlanId");
 
                     b.ToTable("PlanFeatures");
 
@@ -91,181 +94,61 @@ namespace myapp.Migrations
                         {
                             Id = 1,
                             Description = "Limited VR Training",
-                            PlanOptionId = 1
+                            PlanId = 1
                         },
                         new
                         {
                             Id = 2,
                             Description = "Access to Home Scenario",
-                            PlanOptionId = 1
+                            PlanId = 1
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Limited VR Training",
-                            PlanOptionId = 4
+                            Description = "AI Chatbot Support",
+                            PlanId = 2
                         },
                         new
                         {
                             Id = 4,
-                            Description = "Access to Home Scenario",
-                            PlanOptionId = 4
+                            Description = "Home & Factory Scenarios",
+                            PlanId = 2
                         },
                         new
                         {
                             Id = 5,
-                            Description = "Limited VR Training",
-                            PlanOptionId = 7
+                            Description = "Full VR Training Access",
+                            PlanId = 2
                         },
                         new
                         {
                             Id = 6,
-                            Description = "Access to Home Scenario",
-                            PlanOptionId = 7
+                            Description = "Certification",
+                            PlanId = 2
                         },
                         new
                         {
                             Id = 7,
-                            Description = "AI Chatbot Support",
-                            PlanOptionId = 2
+                            Description = "Unlimited VR Training",
+                            PlanId = 3
                         },
                         new
                         {
                             Id = 8,
-                            Description = "Home & Factory Scenarios",
-                            PlanOptionId = 2
+                            Description = "All Scenarios (Home, Factory, Vehicle)",
+                            PlanId = 3
                         },
                         new
                         {
                             Id = 9,
-                            Description = "Full VR Training Access",
-                            PlanOptionId = 2
+                            Description = "AI Chatbot + Burn Detection",
+                            PlanId = 3
                         },
                         new
                         {
                             Id = 10,
-                            Description = "Certification",
-                            PlanOptionId = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Description = "AI Chatbot Support",
-                            PlanOptionId = 5
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Description = "Home & Factory Scenarios",
-                            PlanOptionId = 5
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Description = "Full VR Training Access",
-                            PlanOptionId = 5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Description = "Certification",
-                            PlanOptionId = 5
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Description = "AI Chatbot Support",
-                            PlanOptionId = 8
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Description = "Home & Factory Scenarios",
-                            PlanOptionId = 8
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Description = "Full VR Training Access",
-                            PlanOptionId = 8
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Description = "Certification",
-                            PlanOptionId = 8
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Description = "Unlimited VR Training",
-                            PlanOptionId = 3
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Description = "All Scenarios (Home, Factory, Vehicle)",
-                            PlanOptionId = 3
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Description = "AI Chatbot + Burn Detection",
-                            PlanOptionId = 3
-                        },
-                        new
-                        {
-                            Id = 22,
                             Description = "Multi-User & Custom Reports",
-                            PlanOptionId = 3
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Description = "Unlimited VR Training",
-                            PlanOptionId = 6
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Description = "All Scenarios (Home, Factory, Vehicle)",
-                            PlanOptionId = 6
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Description = "AI Chatbot + Burn Detection",
-                            PlanOptionId = 6
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Description = "Multi-User & Custom Reports",
-                            PlanOptionId = 6
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Description = "Unlimited VR Training",
-                            PlanOptionId = 9
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Description = "All Scenarios (Home, Factory, Vehicle)",
-                            PlanOptionId = 9
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Description = "AI Chatbot + Burn Detection",
-                            PlanOptionId = 9
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Description = "Multi-User & Custom Reports",
-                            PlanOptionId = 9
+                            PlanId = 3
                         });
                 });
 
@@ -425,13 +308,13 @@ namespace myapp.Migrations
 
             modelBuilder.Entity("myapp.auth.Models.PlanFeature", b =>
                 {
-                    b.HasOne("myapp.auth.Models.PlanOption", "PlanOption")
+                    b.HasOne("myapp.auth.Models.Plan", "Plan")
                         .WithMany("Features")
-                        .HasForeignKey("PlanOptionId")
+                        .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PlanOption");
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("myapp.auth.Models.PlanOption", b =>
@@ -447,12 +330,9 @@ namespace myapp.Migrations
 
             modelBuilder.Entity("myapp.auth.Models.Plan", b =>
                 {
-                    b.Navigation("Options");
-                });
-
-            modelBuilder.Entity("myapp.auth.Models.PlanOption", b =>
-                {
                     b.Navigation("Features");
+
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }
