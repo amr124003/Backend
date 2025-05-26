@@ -21,6 +21,26 @@ namespace myapp.DataAccess
             {
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+
+                // Create and link a profile for the new user
+                var profile = new Profile
+                {
+                    UserId = user.Id,
+                    FullName = user.FullName,
+                    Email = user.Email,
+                    TrainingProgress = 0,
+                    userScore = 0,
+                    Achievements = new List<string>(),
+                    TrainingHistory = new List<TrainingHistoryItem>(),
+                    Certificates = new List<CertificateItem>()
+                };
+                _context.Profiles.Add(profile);
+                await _context.SaveChangesAsync();
+
+                // Optionally set ProfileId in User if you want to keep this reference
+                user.Profile.Id = profile.Id;
+                await _context.SaveChangesAsync();
+
                 return true;
             }
             catch (Exception ex)

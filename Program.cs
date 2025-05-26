@@ -58,6 +58,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -75,6 +76,11 @@ app.UseAuthorization();
 app.UseMiddleware<AuthMiddleware>();
 
 app.MapControllers();
+
+// Add this in the service configuration section
+
+// Add this in the endpoint configuration section
+app.MapHub<myapp.auth.Hubs.LeaderboardHub>("/leaderboardHub");
 
 app.Run();
 

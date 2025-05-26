@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 using myapp.auth.Models;
+using myapp.Data;
+using myapp.auth.Hubs;
 
 namespace myapp.auth.Controllers
 {
@@ -7,73 +11,136 @@ namespace myapp.auth.Controllers
     [Route("api/[controller]")]
     public class ProfileController : ControllerBase
     {
-        private static readonly Dictionary<string, Profile> Profiles = new()
+        private readonly ApplicationDbContext _context;
+        private readonly IHubContext<LeaderboardHub> _hubContext;
+
+        public ProfileController(ApplicationDbContext context, IHubContext<LeaderboardHub> hubContext)
         {
-            ["user1"] = new Profile
-            {
-                Id = 1,
-                FullName = "Amera Mahmoud",
-                Email = "amera@email.com",
-                PhotoUrl = "https://example.com/profile-photo.png",
-                Subscription = "Premium",
-                TrainingProgress = 60,
-                Achievements = new List<string>
-                {
-                    "Fire Safety Expert",
-                    "Car Emergency Responder"
-                },
-                TrainingHistory = new List<TrainingHistoryItem>
-                {
-                    new() { Title = "Home Fire Drill", Status = "Completed" },
-                    new() { Title = "Factory Safety", Status = "In Progress" }
-                },
-                Certificates = new List<CertificateItem>
-                {
-                    new() { Title = "Fire Safety Training", PreviewUrl = "https://example.com/cert1-preview.pdf", DownloadUrl = "https://example.com/cert1.pdf" },
-                    new() { Title = "Industrial Safety", PreviewUrl = "https://example.com/cert2-preview.pdf", DownloadUrl = "https://example.com/cert2.pdf" }
-                }
-            }
-        };
+            _context = context;
+            _hubContext = hubContext;
+        }
 
         [HttpGet("{id}")]
-        public ActionResult<Profile> GetProfile(string id)
+        public async Task<ActionResult<Profile>> GetProfile(int id)
         {
-            if (!Profiles.TryGetValue(id, out var profile))
+            var profile = await _context.Profiles
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (profile == null)
                 return NotFound("Profile not found.");
             return Ok(profile);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<Profile> UpdateProfile(string id, [FromBody] Profile updated)
+        public async Task<ActionResult<Profile>> UpdateProfile(int id, [FromBody] Profile updated)
         {
-            if (!Profiles.ContainsKey(id))
+            var profile = await _context.Profiles.FindAsync(id);
+            if (profile == null)
                 return NotFound("Profile not found.");
 
-            var profile = Profiles[id];
             profile.FullName = updated.FullName;
             profile.Email = updated.Email;
             profile.PhotoUrl = updated.PhotoUrl;
-            // Optionally update other fields as needed
+            profile.Subscription = updated.Subscription;
+            profile.TrainingProgress = updated.TrainingProgress;
+            profile.Achievements = updated.Achievements;
+            profile.TrainingHistory = updated.TrainingHistory;
+            profile.Certificates = updated.Certificates;
+
+            // Update userScore if changed
+            profile.userScore = updated.userScore;
+
+            await _context.SaveChangesAsync();
+
+            // Fetch top 10 leaderboard
+            var topProfiles = await _context.Profiles
+                .OrderByDescending(p => p.userScore)
+                .ThenBy(p => p.FullName)
+                .Take(10)
+                .Select(p => new
+                {
+                    p.PhotoUrl,
+                    p.FullName,
+                    p.userScore
+                })
+                .ToListAsync();
+
+            var leaderboard = topProfiles
+                .Select((p, i) => new LeaderboardEntryDto
+                {
+                    Rank = i + 1,
+                    PhotoUrl = p.PhotoUrl,
+                    FullName = p.FullName,
+                    Score = p.userScore
+                })
+                .ToList();
+
+            // Broadcast to all clients
+            await _hubContext.Clients.All.SendAsync("LeaderboardUpdated", leaderboard);
+
             return Ok(profile);
         }
 
         [HttpPost]
-        public ActionResult<Profile> CreateProfile([FromBody] Profile newProfile)
+        public async Task<ActionResult<Profile>> CreateProfile([FromBody] Profile newProfile)
         {
-            var profileKey = newProfile.Id.ToString(); // Convert the integer Id to a string key
-            if (Profiles.ContainsKey(profileKey))
-                return Conflict("Profile already exists.");
+            // Prevent multiple profiles for the same user
+            var existingProfile = await _context.Profiles
+                .FirstOrDefaultAsync(p => p.UserId == newProfile.UserId);
+            if (existingProfile != null)
+                return BadRequest("A profile already exists for this user.");
 
-            Profiles[profileKey] = newProfile; // Use the string key for the dictionary
-            return CreatedAtAction(nameof(GetProfile), new { id = profileKey }, newProfile);
+            _context.Profiles.Add(newProfile);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetProfile), new { id = newProfile.Id }, newProfile);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteProfile(string id)
+        public async Task<IActionResult> DeleteProfile(int id)
         {
-            if (!Profiles.Remove(id))
+            var profile = await _context.Profiles.FindAsync(id);
+            if (profile == null)
                 return NotFound("Profile not found.");
+
+            _context.Profiles.Remove(profile);
+            await _context.SaveChangesAsync();
             return Ok("Profile deleted.");
+        }
+
+        [HttpPost("{id}/photo")]
+        public async Task<IActionResult> UploadPhoto(int id, IFormFile file)
+        {
+            var profile = await _context.Profiles.FindAsync(id);
+            if (profile == null)
+                return NotFound("Profile not found.");
+
+            // Example: Save the file and set the PhotoUrl
+            // In production, use a file service and proper validation
+            var uploadsFolder = Path.Combine("wwwroot", "profile-photos");
+            Directory.CreateDirectory(uploadsFolder);
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            profile.PhotoUrl = $"/profile-photos/{fileName}";
+            await _context.SaveChangesAsync();
+            return Ok(profile);
+        }
+
+        [HttpDelete("{id}/photo")]
+        public async Task<IActionResult> RemovePhoto(int id)
+        {
+            var profile = await _context.Profiles.FindAsync(id);
+            if (profile == null)
+                return NotFound("Profile not found.");
+
+            profile.PhotoUrl = null;
+            await _context.SaveChangesAsync();
+            return Ok(profile);
         }
     }
 }

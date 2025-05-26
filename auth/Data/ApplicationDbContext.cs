@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using myapp.auth.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace myapp.Data
 {
@@ -14,15 +18,47 @@ namespace myapp.Data
         public DbSet<PlanFeature> PlanFeatures { get; set; }
         public DbSet<PlanOption> PlanOption { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<PlanOption>()
-            .Property(p => p.Price)
-            .HasColumnType("decimal(18,2)");
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
 
+            // Configure owned types for Profile
+            modelBuilder.Entity<Profile>(profile =>
+            {
+                profile.OwnsMany(p => p.Certificates, a =>
+                {
+                    a.WithOwner().HasForeignKey("ProfileId");
+                    a.Property<int>("Id");
+                    a.HasKey("Id");
+                });
+                profile.OwnsMany(p => p.TrainingHistory, a =>
+                {
+                    a.WithOwner().HasForeignKey("ProfileId");
+                    a.Property<int>("Id");
+                    a.HasKey("Id");
+                });
+
+                // Store Achievements as a delimited string with value comparer
+                var achievementsConverter = new ValueConverter<List<string>, string>(
+                    v => v != null ? string.Join(';', v) : null,
+                    v => v != null ? new List<string>(v.Split(';', System.StringSplitOptions.RemoveEmptyEntries)) : new List<string>()
+                );
+                var achievementsComparer = new ValueComparer<List<string>>(
+                    (c1, c2) => c1 != null && c2 != null ? c1.SequenceEqual(c2) : c1 == c2,
+                    c => c != null ? c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())) : 0,
+                    c => c != null ? c.ToList() : new List<string>()
+                );
+
+                profile.Property(p => p.Achievements)
+                    .HasConversion(achievementsConverter)
+                    .Metadata.SetValueComparer(achievementsComparer);
+            });
 
             // Seed Plans
             modelBuilder.Entity<Plan>().HasData(
@@ -69,9 +105,9 @@ namespace myapp.Data
             modelBuilder.Entity<PlanFeature>().HasData(
                 // Plan 1 Features
                 new PlanFeature { Id = 1, PlanOptionId = 1, Description = "Limited VR Training" },
-                new PlanFeature { Id = 2, PlanOptionId = 1, Description = "Access to Home Scenario" }, 
+                new PlanFeature { Id = 2, PlanOptionId = 1, Description = "Access to Home Scenario" },
                 new PlanFeature { Id = 3, PlanOptionId = 4, Description = "Limited VR Training" },
-                new PlanFeature { Id = 4, PlanOptionId = 4, Description = "Access to Home Scenario" }, 
+                new PlanFeature { Id = 4, PlanOptionId = 4, Description = "Access to Home Scenario" },
                 new PlanFeature { Id = 5, PlanOptionId = 7, Description = "Limited VR Training" },
                 new PlanFeature { Id = 6, PlanOptionId = 7, Description = "Access to Home Scenario" },
                 // Plan 2 Features
