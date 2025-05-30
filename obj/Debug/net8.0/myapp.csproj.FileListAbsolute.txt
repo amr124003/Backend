@@ -171,7 +171,6 @@
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\myapp.exe
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\myapp.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\myapp.pdb
-C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -185,6 +184,8 @@ C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.Id
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.OpenApi.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Stripe.net.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -197,6 +198,7 @@ C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\appsettings.
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\myapp.staticwebassets.endpoints.json
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Azure.Identity.dll
+C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Humanizer.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\user\Documents\Graduation Project\Backend\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll

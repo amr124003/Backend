@@ -19,6 +19,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Add services for controllers
 builder.Services.AddControllers();
+builder.Services.AddScoped<myapp.auth.Services.PaymentService>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
@@ -77,7 +78,6 @@ app.UseMiddleware<AuthMiddleware>();
 
 app.MapControllers();
 
-// Add this in the service configuration section
 
 // Add this in the endpoint configuration section
 app.MapHub<myapp.auth.Hubs.LeaderboardHub>("/leaderboardHub");

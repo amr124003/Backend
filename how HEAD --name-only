@@ -1,0 +1,17 @@
+[33m0541331[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m ignore appsettings file
+[33m66ee701[m Finish Payment Module
+[33m9050c42[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Finish LeaderBoard
+[33mef08c4c[m before starting profile model
+[33m5e46932[m finish plans api
+[33mf8c2908[m update ids in plans and profile controllers
+[33m67e11fc[m finish profile model
+[33m5f05f01[m Finish Plans Model and controller
+[33mb22186a[m Finish authentication
+[33m93cde4c[m finish signup deployment
+[33m7c9f6ab[m finish signin authentication api
+[33m0047405[m finish conection string for database
+[33m5f54d08[m add user model
+[33m9203cb9[m finish version 1 (signup)
+[33mc4febba[m fix auth signup issue
+[33mb485515[m create auth system
+[33maa037ea[m first commit
