@@ -117,4 +117,6 @@ public class AuthController : ControllerBase
             return StatusCode(500, "An error occurred during signin.");
         }
     }
+
+    
 }
