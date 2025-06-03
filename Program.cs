@@ -20,6 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add services for controllers
 builder.Services.AddControllers();
 builder.Services.AddScoped<myapp.auth.Services.PaymentService>();
+builder.Services.AddScoped<myapp.auth.Services.EmailService>();
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 

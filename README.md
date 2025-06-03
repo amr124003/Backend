@@ -2,14 +2,15 @@
 
 ## Overview
 
-This is a backend API for the Nexus application, built with ASP.NET Core (.NET 8). It provides authentication, payment processing (via Stripe), user management, and real-time features using SignalR.
+This is a backend API for the Nexus application, built with ASP.NET Core (.NET 8). It provides authentication (including OTP-based password reset), payment processing (via Stripe), user management, and real-time features using SignalR.
 
 ---
 
 ## Features
 
 - **JWT Authentication**: Secure login and registration with JWT tokens.
-- **User Management**: Signup, signin, and profile management.
+- **User Management**: Signup, signin, profile management, and password reset via email OTP.
+- **Password Reset via OTP**: Users can request a 6-digit OTP to their email and reset their password securely.
 - **Payment Integration**: Stripe-based payment method management and payment processing.
 - **Real-time Communication**: SignalR hub for leaderboard updates.
 - **Swagger UI**: Interactive API documentation and testing.
@@ -19,6 +20,8 @@ This is a backend API for the Nexus application, built with ASP.NET Core (.NET 8
 ---
 
 ## Folder Structure
+
+
 ```
 ├── auth/
 │   ├── Controllers/         # API controllers (e.g., PaymentController)
@@ -41,9 +44,10 @@ This is a backend API for the Nexus application, built with ASP.NET Core (.NET 8
    - [.NET 8 SDK](https://dotnet.microsoft.com/download)
    - SQL Server (local or remote)
    - Stripe account (for payment integration)
+   -SMTP provider (for email/OTP)
 
 2. **Configuration**
-   - Update `appsettings.json` with your database connection string, JWT settings, and Stripe secret key.
+   - Update `appsettings.json` with your database connection string, JWT settings, Stripe secret key, and SMTP settings.
 
 3. **Database**
    - Ensure the `Your Project DB` database exists and is accessible.
@@ -62,18 +66,24 @@ The API will be available at `http://localhost:8080` (or as configured).
 
 ## API Endpoints
 
-| Method | Route                                 | Description                        | Auth Required |
-|--------|---------------------------------------|------------------------------------|--------------|
-| POST   | `/api/payment/add`                    | Add a payment method (Stripe)      | Yes          |
-| GET    | `/api/payment` (example)              | List payment methods (if exists)   | Yes          |
-| ...    | ...                                   | ...                                | ...          |
-| GET    | `/leaderboardHub` (SignalR endpoint)  | Real-time leaderboard updates      | Yes          |
+| Method | Route                        | Description                                 | Auth Required |
+|--------|------------------------------|---------------------------------------------|--------------|
+| POST   | `/api/auth/signup`           | Register a new user                         | No           |
+| POST   | `/api/auth/signin`           | User login, returns JWT                     | No           |
+| POST   | `/api/auth/forgot-password`  | Request a 6-digit OTP for password reset    | No           |
+| POST   | `/api/auth/verify-otp`       | Verify OTP sent to email                    | No           |
+| POST   | `/api/auth/reset-password`   | Reset password using OTP                    | No           |
+| POST   | `/api/payment/add`           | Add a payment method (Stripe)               | Yes          |
+| GET    | `/api/payment` (example)     | List payment methods (if exists)            | Yes          |
+| GET    | `/leaderboardHub`            | Real-time leaderboard updates (SignalR)     | Yes          |
 
 > **Note:** For a full list, see Swagger UI or the Controllers folder.
 
 ---
 
 ## Configuration Example (`appsettings.json`)
+
+
 	{ 
 		"Jwt": { 
 			"Key": "...", 
@@ -81,10 +91,15 @@ The API will be available at `http://localhost:8080` (or as configured).
 			"Audience": "..." 
 		}, 
 		"ConnectionStrings": { 
-			"DefaultConnection": "Server=...;Database=...;integrated security=true;" 
+			"DefaultConnection": "Server=...;Database=...;User Id=...;Password=...;" }, 
+			"Stripe": { "SecretKey": "sk_test_..." 
 		}, 
-		"Stripe": { 
-			"SecretKey": "sk_test_..." 
+		"Smtp": { 
+			"Host": "smtp.example.com", 
+			"Port": "587", 
+			"User": "your_smtp_user", 
+			"Pass": "your_smtp_password", 
+			"From": "no-reply@example.com" 
 		} 
 	}
 	

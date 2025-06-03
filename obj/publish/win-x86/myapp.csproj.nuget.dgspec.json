@@ -58,15 +58,27 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.Data.SqlClient": {
+              "target": "Package",
+              "version": "[5.2.1, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.10, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Stripe.net": {
+              "target": "Package",
+              "version": "[48.2.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -86,16 +98,20 @@
           "warn": true,
           "downloadDependencies": [
             {
-              "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-              "version": "[8.0.15, 8.0.15]"
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
             },
             {
-              "name": "Microsoft.NETCore.App.Runtime.win-x86",
-              "version": "[8.0.15, 8.0.15]"
+              "name": "Microsoft.NETCore.App.Host.win-x86",
+              "version": "[8.0.16, 8.0.16]"
             },
             {
-              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-              "version": "[8.0.15, 8.0.15]"
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.16, 8.0.16]"
             }
           ],
           "frameworkReferences": {
@@ -106,7 +122,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.204/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {
