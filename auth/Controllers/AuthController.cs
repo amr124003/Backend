@@ -134,8 +134,8 @@ public class AuthController : ControllerBase
 
         // Send token to user's email (implement EmailService or return token for testing)
         // Example with EmailService:
-        // var resetLink = $"https://your-frontend-url/reset-password?token={user.PasswordResetToken}";
-        // await _emailService.SendEmailAsync(user.Email, "Password Reset", $"Reset link: {resetLink}");
+        var resetLink = $"https://your-frontend-url/reset-password?token={user.PasswordResetToken}";
+        await _emailService.SendEmailAsync(user.Email, "Password Reset", $"Reset link: {resetLink}");
 
         // For now, return the token for testing
         return Ok(new { Token = user.PasswordResetToken });
