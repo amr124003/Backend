@@ -69,9 +69,9 @@ namespace myapp.DataAccess
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
-        public async Task<User?> GetUserByResetTokenAsync(string token)
+        public async Task<User?> GetUserByResetOtpAsync(string otp)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetToken == token);
+            return await _context.Users.FirstOrDefaultAsync(u => u.PasswordResetOtp == otp);
         }
 
         public async Task UpdateUserAsync(User user)

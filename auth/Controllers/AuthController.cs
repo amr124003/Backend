@@ -69,16 +69,14 @@ public class AuthController : ControllerBase
                 return BadRequest(ModelState);
             }
 
-            var user = await _userDataAccess.GetUserByUsernameAsync(model.Username);
+            var user = await _userDataAccess.GetUserByEmailAsync(model.mail);
             if (user == null)
             {
-                Console.WriteLine("User not found.");
-                return Unauthorized("Invalid username or password.");
+                return Unauthorized("Invalid email or password.");
             }
 
             if (string.IsNullOrEmpty(user.Password) || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
-                Console.WriteLine("Password verification failed.");
                 return Unauthorized("Invalid username or password.");
             }
 
@@ -101,7 +99,7 @@ public class AuthController : ControllerBase
                     new Claim(ClaimTypes.Name, user.Username),
                     new Claim(ClaimTypes.Email, user.Email)
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMonths(1),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -128,34 +126,45 @@ public class AuthController : ControllerBase
             return NotFound("User not found.");
 
         // Generate token and expiry
-        user.PasswordResetToken = Guid.NewGuid().ToString();
-        user.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1);
+        var otp = new Random().Next(100000, 999999).ToString();
+        user.PasswordResetOtp = otp;
+        user.PasswordResetOtpExpiry = DateTime.UtcNow.AddMinutes(20);
         await _userDataAccess.UpdateUserAsync(user);
 
-        // Send token to user's email (implement EmailService or return token for testing)
         // Example with EmailService:
-        var resetLink = $"https://your-frontend-url/reset-password?token={user.PasswordResetToken}";
-        await _emailService.SendEmailAsync(user.Email, "Password Reset", $"Reset link: {resetLink}");
+        await _emailService.SendEmailAsync(user.Email, "Password Reset OTP", $"Your OTP is: {otp}");
 
         // For now, return the token for testing
-        return Ok(new { Token = user.PasswordResetToken });
+        return Ok("OTP has been sent to your email.");
+    }
+
+    [HttpPost("verify-otp")]
+    public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request)
+    {
+        var user = await _userDataAccess.GetUserByEmailAsync(request.Email);
+        if (user == null || user.PasswordResetOtp != request.Otp || user.PasswordResetOtpExpiry < DateTime.UtcNow)
+            return BadRequest("Invalid or expired OTP.");
+
+        // Optionally, mark OTP as used (clear it)
+        await _userDataAccess.UpdateUserAsync(user);
+
+        // You may want to issue a short-lived token here for password reset, or just allow the next step
+        return Ok("OTP verified. You can now reset your password.");
     }
 
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
     {
-        var user = await _userDataAccess.GetUserByResetTokenAsync(request.Token);
-        if (user == null || user.PasswordResetTokenExpiry < DateTime.UtcNow)
-            return BadRequest("Invalid or expired token.");
+        var user = await _userDataAccess.GetUserByResetOtpAsync(request.Otp);
+        if (user == null || user.PasswordResetOtpExpiry < DateTime.UtcNow)
+            return BadRequest("Invalid or expired OTP.");
 
         user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
-        user.PasswordResetToken = null;
-        user.PasswordResetTokenExpiry = null;
+        user.PasswordResetOtp = null;
+        user.PasswordResetOtpExpiry = null;
         await _userDataAccess.UpdateUserAsync(user);
 
         return Ok("Password has been reset.");
     }
-
-
 
 }

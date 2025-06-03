@@ -12,7 +12,7 @@ namespace myapp.auth.Models
         public Profile? Profile { get; set; }
 
         // these for password reset
-        public string? PasswordResetToken { get; set; }
-        public DateTime? PasswordResetTokenExpiry { get; set; }
+        public string? PasswordResetOtp { get; set; }
+        public DateTime? PasswordResetOtpExpiry { get; set; }
     }
 }

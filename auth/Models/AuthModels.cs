@@ -10,7 +10,7 @@ namespace myapp.auth.Models
 
     public class SigninModel
     {
-        public required string Username { get; set; }
+        public required string mail { get; set; }
         public required string Password { get; set; }
     }
 
@@ -21,7 +21,7 @@ namespace myapp.auth.Models
 
     public class ResetPasswordRequest
     {
-        public required string Token { get; set; }
+        public required string Otp { get; set; }
         public required string NewPassword { get; set; }
     }
 
