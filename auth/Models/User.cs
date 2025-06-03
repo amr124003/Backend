@@ -10,5 +10,9 @@ namespace myapp.auth.Models
         public required string Password { get; set; }
         public required string Username { get; set; }
         public Profile? Profile { get; set; }
+
+        // these for password reset
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiry { get; set; }
     }
 }
