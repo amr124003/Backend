@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using myapp.auth.Models;
 using myapp.DataAccess;
 using BCrypt.Net;
+using myapp.auth.Services;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -15,11 +16,13 @@ public class AuthController : ControllerBase
 {
     private readonly UserDataAccess _userDataAccess;
     private readonly IConfiguration _configuration;
+    private readonly EmailService _emailService;
 
-    public AuthController(UserDataAccess userDataAccess, IConfiguration configuration)
+    public AuthController(UserDataAccess userDataAccess, IConfiguration configuration, EmailService emailService)
     {
         _userDataAccess = userDataAccess;
         _configuration = configuration;
+        _emailService = emailService;
     }
 
     [HttpPost("signup")]
@@ -117,6 +120,42 @@ public class AuthController : ControllerBase
             return StatusCode(500, "An error occurred during signin.");
         }
     }
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        var user = await _userDataAccess.GetUserByEmailAsync(request.Email);
+        if (user == null)
+            return NotFound("User not found.");
 
-    
+        // Generate token and expiry
+        user.PasswordResetToken = Guid.NewGuid().ToString();
+        user.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1);
+        await _userDataAccess.UpdateUserAsync(user);
+
+        // Send token to user's email (implement EmailService or return token for testing)
+        // Example with EmailService:
+        // var resetLink = $"https://your-frontend-url/reset-password?token={user.PasswordResetToken}";
+        // await _emailService.SendEmailAsync(user.Email, "Password Reset", $"Reset link: {resetLink}");
+
+        // For now, return the token for testing
+        return Ok(new { Token = user.PasswordResetToken });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var user = await _userDataAccess.GetUserByResetTokenAsync(request.Token);
+        if (user == null || user.PasswordResetTokenExpiry < DateTime.UtcNow)
+            return BadRequest("Invalid or expired token.");
+
+        user.Password = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        user.PasswordResetToken = null;
+        user.PasswordResetTokenExpiry = null;
+        await _userDataAccess.UpdateUserAsync(user);
+
+        return Ok("Password has been reset.");
+    }
+
+
+
 }
