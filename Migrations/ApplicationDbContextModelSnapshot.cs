@@ -56,7 +56,7 @@ namespace myapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("PaymentMethods", (string)null);
                 });
 
             modelBuilder.Entity("myapp.auth.Models.Plan", b =>
@@ -78,7 +78,7 @@ namespace myapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Plans");
+                    b.ToTable("Plans", (string)null);
 
                     b.HasData(
                         new
@@ -122,7 +122,7 @@ namespace myapp.Migrations
 
                     b.HasIndex("PlanOptionId");
 
-                    b.ToTable("PlanFeatures");
+                    b.ToTable("PlanFeatures", (string)null);
 
                     b.HasData(
                         new
@@ -337,7 +337,7 @@ namespace myapp.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("PlanOption");
+                    b.ToTable("PlanOption", (string)null);
 
                     b.HasData(
                         new
@@ -469,7 +469,7 @@ namespace myapp.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("myapp.auth.Models.User", b =>
@@ -504,7 +504,7 @@ namespace myapp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("myapp.auth.Models.PlanFeature", b =>
@@ -537,7 +537,7 @@ namespace myapp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("myapp.auth.Models.CertificateItem", "Certificates", b1 =>
+                    b.OwnsMany("myapp.auth.Models.Profile.Certificates#myapp.auth.Models.CertificateItem", "Certificates", b1 =>
                         {
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
@@ -561,13 +561,13 @@ namespace myapp.Migrations
 
                             b1.HasIndex("ProfileId");
 
-                            b1.ToTable("CertificateItem");
+                            b1.ToTable("CertificateItem", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProfileId");
                         });
 
-                    b.OwnsMany("myapp.auth.Models.TrainingHistoryItem", "TrainingHistory", b1 =>
+                    b.OwnsMany("myapp.auth.Models.Profile.TrainingHistory#myapp.auth.Models.TrainingHistoryItem", "TrainingHistory", b1 =>
                         {
                             b1.Property<int>("Id")
                                 .ValueGeneratedOnAdd()
@@ -588,7 +588,7 @@ namespace myapp.Migrations
 
                             b1.HasIndex("ProfileId");
 
-                            b1.ToTable("TrainingHistoryItem");
+                            b1.ToTable("TrainingHistoryItem", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProfileId");

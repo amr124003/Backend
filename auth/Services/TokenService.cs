@@ -16,7 +16,7 @@ namespace myapp.Services
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _secretKey = _configuration["Jwt:SigningKey"]; // TODO: Ensure SigningKey is configured securely (e.g., via environment variables, Key Vault).
+            _secretKey = "YourSuperSecretKeyHere123!"; // TODO: Ensure SigningKey is configured securely (e.g., via environment variables, Key Vault).
 
             if (string.IsNullOrEmpty(_secretKey))
             {
@@ -30,7 +30,10 @@ namespace myapp.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Username) }),
+                Subject = new ClaimsIdentity(new[] { 
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.NameIdentifier , user.Id.ToString())
+                }),
                 Expires = DateTime.UtcNow.AddDays(7), // TODO: Set appropriate expiration
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secretKey!)), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -49,7 +52,7 @@ namespace myapp.Services
             {
                 var validationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true, 
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:SigningKey"])),
                     ValidateIssuer = true, // TODO: Validate issuer if applicable
                     ValidIssuer = _configuration["Jwt:Issuer"], // Get issuer from configuration

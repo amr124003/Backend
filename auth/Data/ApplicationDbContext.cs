@@ -25,6 +25,12 @@ namespace myapp.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Profile>()
+                .OwnsMany(x => x.TrainingHistory);
+
+            modelBuilder.Entity<Profile>()
+               .OwnsMany(x => x.Certificates);
+
             modelBuilder.Entity<PlanOption>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");

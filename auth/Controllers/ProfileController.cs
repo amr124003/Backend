@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.SignalR;
 using myapp.auth.Models;
 using myapp.Data;
 using myapp.auth.Hubs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using myapp.auth.Dtos;
+using Mapster;
 
 namespace myapp.auth.Controllers
 {
@@ -32,24 +36,13 @@ namespace myapp.auth.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Profile>> UpdateProfile(int id, [FromBody] Profile updated)
+        public async Task<ActionResult<Profile>> UpdateProfile(int id, [FromBody] CreateProfileDto updated)
         {
             var profile = await _context.Profiles.FindAsync(id);
             if (profile == null)
                 return NotFound("Profile not found.");
 
-            profile.FullName = updated.FullName;
-            profile.Email = updated.Email;
-            profile.PhotoUrl = updated.PhotoUrl;
-            profile.Subscription = updated.Subscription;
-            profile.TrainingProgress = updated.TrainingProgress;
-            profile.Achievements = updated.Achievements;
-            profile.TrainingHistory = updated.TrainingHistory;
-            profile.Certificates = updated.Certificates;
-
-            // Update userScore if changed
-            profile.userScore = updated.userScore;
-
+            updated.Adapt(profile);
             await _context.SaveChangesAsync();
 
             // Fetch top 10 leaderboard
@@ -81,19 +74,25 @@ namespace myapp.auth.Controllers
             return Ok(profile);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Profile>> CreateProfile([FromBody] Profile newProfile)
+        [HttpPost("CreateProfile")]
+        [Authorize]
+        public async Task<IActionResult> CreateProfile (CreateProfileDto newProfileDto)
         {
-            // Prevent multiple profiles for the same user
-            var existingProfile = await _context.Profiles
-                .FirstOrDefaultAsync(p => p.UserId == newProfile.UserId);
-            if (existingProfile != null)
-                return BadRequest("A profile already exists for this user.");
+            if (!int.TryParse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var userId))
+                return Unauthorized("Invalid Token");
+
+            if (await _context.Profiles.AnyAsync(p => p.UserId == userId))
+                return BadRequest("A profile already exists for this user");
+
+            var newProfile = newProfileDto.Adapt<Profile>();
+            newProfile.UserId = userId;
 
             _context.Profiles.Add(newProfile);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetProfile), new { id = newProfile.Id }, newProfile);
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProfile(int id)
