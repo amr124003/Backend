@@ -202,7 +202,7 @@
       },
       {
         "Name": "updated",
-        "Type": "myapp.auth.Models.Profile",
+        "Type": "myapp.auth.Dtos.CreateProfileDto",
         "IsRequired": true
       }
     ],
@@ -283,6 +283,126 @@
         "Name": "newProfileDto",
         "Type": "myapp.auth.Dtos.CreateProfileDto",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "myapp.auth.Controllers.ResourcesController",
+    "Method": "CreateResources",
+    "RelativePath": "api/Resources/CreateResource",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Media",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Deleted",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "ResourcesType",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "myapp.auth.Controllers.ResourcesController",
+    "Method": "DeleteResource",
+    "RelativePath": "api/Resources/DeleteResources",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "myapp.auth.Controllers.ResourcesController",
+    "Method": "GetResourceAsync",
+    "RelativePath": "api/Resources/Get Resource",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "myapp.auth.Controllers.ResourcesController",
+    "Method": "GetAllResources",
+    "RelativePath": "api/Resources/GetAllResources",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Type",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "myapp.auth.Controllers.ResourcesController",
+    "Method": "UpdateResource",
+    "RelativePath": "api/Resources/UpdateResource",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Media",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

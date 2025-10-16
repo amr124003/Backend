@@ -11,29 +11,25 @@ namespace myapp.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        private readonly string? _secretKey;
+        
 
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _secretKey = "YourSuperSecretKeyHere123!"; // TODO: Ensure SigningKey is configured securely (e.g., via environment variables, Key Vault).
-
-            if (string.IsNullOrEmpty(_secretKey))
-            {
-                throw new ArgumentNullException("Jwt:SigningKey is not configured.");
-            }
         }
 
         public string GenerateToken(User user)
         {
             // TODO: Implement actual JWT generation logic
             var tokenHandler = new JwtSecurityTokenHandler();
+            var _secretKey = _configuration["Jwt:Key"];
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { 
+                Subject = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, user.Username),
                     new Claim(ClaimTypes.NameIdentifier , user.Id.ToString())
                 }),
+                
                 Expires = DateTime.UtcNow.AddDays(7), // TODO: Set appropriate expiration
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secretKey!)), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -53,7 +49,7 @@ namespace myapp.Services
                 var validationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:SigningKey"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]!)),
                     ValidateIssuer = true, // TODO: Validate issuer if applicable
                     ValidIssuer = _configuration["Jwt:Issuer"], // Get issuer from configuration
                     ValidateAudience = true, // TODO: Validate audience if applicable

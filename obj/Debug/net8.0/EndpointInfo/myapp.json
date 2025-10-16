@@ -395,22 +395,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/Profile"
+                "$ref": "#/components/schemas/CreateProfileDto"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Profile"
+                "$ref": "#/components/schemas/CreateProfileDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Profile"
+                "$ref": "#/components/schemas/CreateProfileDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Profile"
+                "$ref": "#/components/schemas/CreateProfileDto"
               }
             }
           }
@@ -550,6 +550,185 @@
             "schema": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Resources/CreateResource": {
+      "post": {
+        "tags": [
+          "Resources"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Media": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "Deleted": {
+                    "type": "boolean"
+                  },
+                  "ResourcesType": {
+                    "$ref": "#/components/schemas/ResourcesType"
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Media": {
+                  "style": "form"
+                },
+                "Deleted": {
+                  "style": "form"
+                },
+                "ResourcesType": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Resources/UpdateResource": {
+      "put": {
+        "tags": [
+          "Resources"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Media": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "Id": {
+                  "style": "form"
+                },
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Media": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Resources/DeleteResources": {
+      "delete": {
+        "tags": [
+          "Resources"
+        ],
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Resources/Get Resource": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "parameters": [
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ResourcesType"
+            }
+          },
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Resources/GetAllResources": {
+      "get": {
+        "tags": [
+          "Resources"
+        ],
+        "parameters": [
+          {
+            "name": "Type",
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ResourcesType"
             }
           }
         ],
@@ -1046,6 +1225,14 @@
           }
         },
         "additionalProperties": false
+      },
+      "ResourcesType": {
+        "enum": [
+          0,
+          1
+        ],
+        "type": "integer",
+        "format": "int32"
       },
       "SigninModel": {
         "required": [

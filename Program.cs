@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using myapp.Data;
 using myapp.Mapping;
 using myapp.middlewares;
+using myapp.Repositories.ResourcesRepo;
 using myapp.Services;
 using System.Text;
 
@@ -37,7 +38,8 @@ builder.Services.AddScoped<myapp.auth.Services.EmailService>();
 
 // Register ApplicationDbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer("Server =.;Initial Catalog=Nexus;Integrated Security=SSPI;Trust Server Certificate=True;"));
+    options.UseSqlServer("Server=db29856.public.databaseasp.net; Database=db29856; User Id=db29856; Password=8f=EN!2y3x#H; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;", opt => 
+    opt.EnableRetryOnFailure()));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -59,6 +61,9 @@ builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 // Register UserDataAccess
 builder.Services.AddScoped<myapp.DataAccess.UserDataAccess>();
+builder.Services.AddScoped<IResourcesRepo , ResourcesRepo>();
+builder.Services.AddHttpContextAccessor();
+
 
 // Add authorization services
 builder.Services.AddAuthorization();

@@ -11,6 +11,8 @@ namespace myapp.Mapping
             config.NewConfig<CreateProfileDto, Profile>();
             config.NewConfig<TrainingHistoryItemDto, TrainingHistoryItem>();
             config.NewConfig<CertificateItemDto, CertificateItem>();
+            config.NewConfig<CreateResoucesDto, Resources>();
+            config.NewConfig<UpdateResourcesDto, Resources>();
         }
     }
 }

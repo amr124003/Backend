@@ -477,3 +477,4 @@ E:\Nexus\Backend\bin\Debug\net8.0\Mapster.DependencyInjection.dll
 E:\Nexus\Backend\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
 E:\Nexus\Backend\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 E:\Nexus\Backend\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+E:\Nexus\Backend\bin\Debug\net8.0\appsettings.json

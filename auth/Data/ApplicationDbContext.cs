@@ -16,6 +16,7 @@ namespace myapp.Data
 
         public DbSet<Plan> Plans { get; set; }
         public DbSet<PlanFeature> PlanFeatures { get; set; }
+        public DbSet<Resources> Resources { get; set; }
         public DbSet<PlanOption> PlanOption { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
