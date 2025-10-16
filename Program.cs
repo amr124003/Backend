@@ -37,8 +37,9 @@ builder.Services.AddScoped<myapp.auth.Services.PaymentService>();
 builder.Services.AddScoped<myapp.auth.Services.EmailService>();
 
 // Register ApplicationDbContext
+var constr = builder.Configuration.GetConnectionString("constr");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer("Server=db29856.public.databaseasp.net; Database=db29856; User Id=db29856; Password=8f=EN!2y3x#H; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;", opt => 
+    options.UseSqlServer(constr , opt => 
     opt.EnableRetryOnFailure()));
 
 builder.Logging.ClearProviders();
